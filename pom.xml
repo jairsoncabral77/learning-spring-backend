@@ -5,18 +5,23 @@
 	<artifactId>parlamento-microservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Parlamento Microservice</name>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.2.RELEASE</version>
+		<version>1.5.1.RELEASE</version>
 	</parent>
 
 	<profiles>
 		<profile>
 			<id>dev</id>
 			<properties>
+				<!--jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver -->
+				<!--jdbcURL>jdbc:mysql://localhost:3306/meuvoto_parlamento</jdbcURL -->
 				<jdbcDriver>net.sf.log4jdbc.DriverSpy</jdbcDriver>
-				<jdbcURL>jdbc:log4jdbc:mysql://localhost:3306/meuvoto_parlamento</jdbcURL>
+				<jdbcURL>jdbc:log4jdbc:mysql://localhost:3306/parlamento</jdbcURL>
+				<dbusername>parlamento</dbusername>
+				<dbpassword>parlamento123</dbpassword>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -33,7 +38,9 @@
 			<id>prod</id>
 			<properties>
 				<jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
-				<jdbcURL>jdbc:mysql://localhost:3306/meuvoto_parlamento</jdbcURL>
+				<jdbcURL>${env.JDBC_URL}</jdbcURL>
+				<dbusername>${env.DB_USERNAME}</dbusername>
+				<dbpassword>${env.DB_PASSWORD}</dbpassword>
 			</properties>
 			<activation>
 				<activeByDefault>false</activeByDefault>
@@ -85,7 +92,7 @@
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.1-api</artifactId>
-			<version>1.0.0.Final</version>
+			<version>1.0.2.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -114,19 +121,39 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.lazyluke</groupId>
 			<artifactId>log4jdbc-remix</artifactId>
 			<version>0.2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.5.0</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.springtestdbunit</groupId>
+			<artifactId>spring-test-dbunit</artifactId>
+			<version>1.2.0</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -136,6 +163,7 @@
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>test</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -159,7 +187,16 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
 		</plugins>
+		<testResources>
+			<testResource>
+				<directory>test_resource</directory>
+			</testResource>
+		</testResources>
 		<resources>
 			<resource>
 				<directory>resource</directory>

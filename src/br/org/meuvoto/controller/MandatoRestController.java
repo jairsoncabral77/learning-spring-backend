@@ -26,7 +26,7 @@ public class MandatoRestController {
 	private MandatoService mandatoService;
 
 	//TESTABILITY; 2; 5; "Testar Rest controller MandatoRestController.get"
-	@RequestMapping(path = "/mandato/{id:[\\d]+}", produces = { "application/json" }, method=RequestMethod.GET)
+	@RequestMapping(value = "/mandato/{id:[\\d]+}", produces = { "application/json" }, method=RequestMethod.GET)
 	public Mandato get(@PathVariable("id") Long id) {
 		Mandato mandato = mandatoRepository.findOne(id);
 		if ( mandato == null ) {
@@ -36,7 +36,7 @@ public class MandatoRestController {
 	}
 
 	//TESTABILITY; 2; 5; "Testar Rest controller MandatoRestController.getAll"
-	@RequestMapping(path = "/mandato", produces = { "application/json" }, method=RequestMethod.GET)
+	@RequestMapping(value = "/mandato", produces = { "application/json" }, method=RequestMethod.GET)
 	public List<Mandato> getAll() {
 		Iterable<Mandato> result = mandatoRepository.findAll();
 		@SuppressWarnings("unchecked")
@@ -45,11 +45,10 @@ public class MandatoRestController {
 	}
 
 	//TESTABILITY; 2; 5; "Testar Rest controller MandatoRestController.create"
-	@RequestMapping(path = "/mandato", consumes = { "application/json" }, produces = {
+	@RequestMapping(value = "/mandato", consumes = { "application/json" }, produces = {
 			"application/json" }, method = RequestMethod.POST)
 	public Mandato create(@RequestBody MandatoVO mandatoVO) throws Exception {
-		Mandato mandato = mandatoService.create(mandatoVO.getIdCargo(), mandatoVO.getIdPessoa(), mandatoVO.getDataInicio(),
-				mandatoVO.getDataFim());
+		Mandato mandato = mandatoService.create(mandatoVO.getIdCargo(), mandatoVO.getIdPessoa(), mandatoVO.getDataInicio());
 		return mandato;
 	}
 

@@ -9,16 +9,16 @@ import javax.persistence.Id;
 public class TipoCargo {
 	
 	@Id
-	private Integer id;
+	private Long id;
 
 	@Basic
 	@Column(nullable=false, unique=true)
 	private String nomeCargo;
 	
 	@Basic 
-	private Integer duracao;
+	private int duracao;
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -30,11 +30,11 @@ public class TipoCargo {
 		this.nomeCargo = nomeCargo;
 	}
 
-	public Integer getDuracao() {
+	public int getDuracao() {
 		return duracao;
 	}
 
-	public void setDuracao(Integer duracao) {
+	public void setDuracao(int duracao) {
 		this.duracao = duracao;
 	}
 	

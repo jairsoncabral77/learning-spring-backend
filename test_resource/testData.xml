@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<TipoCargo id="1000" nomeCargo="SENADOR" duracao="96"/>
+	<TipoCargo id="1001" nomeCargo="DEPUTADO FEDERAL" duracao="48"/>
+	<Cargo id="2000" tipo_id="1000" unidade="FEDERAL"/>
+	<Cargo id="2001" tipo_id="1001" unidade="PB"/>
+	<Pessoa id="3000" nome="Pessoa1" cpf="11111111111"/>
+	<Pessoa id="3001" nome="Pessoa2" cpf="22222222222"/>	
+	<Mandato id="4001" dataInicio="2018-01-01" dataFim="2021-12-31" cargo_id="2000" pessoa_id="3000"/>
+</dataset>

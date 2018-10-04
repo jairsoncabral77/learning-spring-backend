@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<settings xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0">
+
+	<proxies>
+		<proxy>
+			<id>cntlm</id>
+			<active>true</active>
+			<protocol>http</protocol>
+			<host>localhost</host>
+			<port>3128</port>
+			<nonProxyHosts>10.*|*.prevnet|*.example.com</nonProxyHosts>
+		</proxy>
+	</proxies>
+
+
+</settings>

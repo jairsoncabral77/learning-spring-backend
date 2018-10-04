@@ -14,8 +14,8 @@
 	<bean id="pooledDataSource" class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName" value="@jdbcDriver@" />
 		<property name="url" value="@jdbcURL@" />
-		<property name="username" value="meuvoto1" />
-		<property name="password" value="passw0rd" />
+		<property name="username" value="@dbusername@" />
+		<property name="password" value="@dbpassword@" />
 		<property name="initialSize" value="5" />
 		<property name="maxTotal" value="30" />
 		<property name="validationQuery" value="SELECT 1" />
@@ -25,7 +25,9 @@
 		<property name="maxWaitMillis" value="2000" />
 		<property name="removeAbandonedTimeout" value="30" />
 		<property name="removeAbandonedOnMaintenance" value="true" />
+		<property name="defaultReadOnly" value="false" />
 	</bean>
+ 
  
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -39,11 +41,11 @@
 			</list>
 		</property>
 		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.hbm2ddl.auto">validate</prop>
-				<prop key="hibernate.show_sql">false</prop>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
-			</props>
+			<value>
+				hibernate.hbm2ddl.auto=validate
+				hibernate.show_sql=true
+				hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect
+			</value>
 		</property>
 	</bean>
 

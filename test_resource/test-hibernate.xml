@@ -1,0 +1,77 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/data/jpa
+    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/jdbc     
+    http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<jdbc:embedded-database id="dataSource" type="HSQL">
+	</jdbc:embedded-database>
+	
+<!-- 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"> -->
+<!-- 		<property name="driverClassName" value="com.mysql.jdbc.Driver" /> -->
+<!-- 		<property name="url" value="jdbc:mysql://localhost:3306/test-parlamento" /> -->
+<!-- 		<property name="username" value="parlamento" /> -->
+<!-- 		<property name="password" value="parlamento123" /> -->
+<!-- 		<property name="initialSize" value="5" /> -->
+<!-- 		<property name="maxTotal" value="30" /> -->
+<!-- 		<property name="validationQuery" value="SELECT 1" /> -->
+<!-- 		<property name="validationQueryTimeout" value="5" /> -->
+<!-- 		<property name="minIdle" value="1" /> -->
+<!-- 		<property name="maxIdle" value="10" /> -->
+<!-- 		<property name="maxWaitMillis" value="2000" /> -->
+<!-- 		<property name="removeAbandonedTimeout" value="30" /> -->
+<!-- 		<property name="removeAbandonedOnMaintenance" value="true" /> -->
+<!-- 		<property name="defaultReadOnly" value="false" /> -->
+<!-- 	</bean> -->
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>br.org.meuvoto.Cargo</value>
+				<value>br.org.meuvoto.Pessoa</value>
+				<value>br.org.meuvoto.Mandato</value>
+				<value>br.org.meuvoto.TipoCargo</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<value>
+				hibernate.hbm2ddl.auto=update
+				hibernate.show_sql=true
+<!-- 				hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect -->
+<!-- 				hibernate.dialect=org.hibernate.dialect.HSQLDialect -->
+				hibernate.id.new_generator_mappings=false
+			</value>
+		</property>
+	</bean>
+
+	<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="database" value="HSQL" />
+<!-- 		<property name="database" value="MYSQL" /> -->
+	</bean>
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="parlamento" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+		<property name="packagesToScan" value="br.org.meuvoto" />		
+	</bean>
+
+	<!-- Enables the Hibernate @Transactional programming model -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+</beans>

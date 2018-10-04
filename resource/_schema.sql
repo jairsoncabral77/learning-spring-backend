@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `meuvoto_parlamento` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `meuvoto_parlamento`;
--- MySQL dump 10.13  Distrib 5.7.9, for linux-glibc2.5 (x86_64)
+USE `parlamento`;
+
+-- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: meuvoto_parlamento
+-- Host: localhost    Database: parlamento
 -- ------------------------------------------------------
--- Server version	5.6.28-0ubuntu0.14.04.1
+-- Server version	5.7.22-0ubuntu0.17.10.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -25,23 +25,14 @@ DROP TABLE IF EXISTS `Cargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Cargo` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `unidade` varchar(100) NOT NULL,
-  `tipo_id` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `unidade` varchar(100) DEFAULT NULL,
+  `tipo_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_ip2vbqnvbkky0wlnk1vqgork9` (`tipo_id`),
-  CONSTRAINT `FK_ip2vbqnvbkky0wlnk1vqgork9` FOREIGN KEY (`tipo_id`) REFERENCES `TipoCargo` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `FK5y6qspdo5uwvpbyxlg0pmtahs` (`tipo_id`),
+  CONSTRAINT `FK5y6qspdo5uwvpbyxlg0pmtahs` FOREIGN KEY (`tipo_id`) REFERENCES `TipoCargo` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Cargo`
---
-
-LOCK TABLES `Cargo` WRITE;
-/*!40000 ALTER TABLE `Cargo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Cargo` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `Mandato`
@@ -51,27 +42,18 @@ DROP TABLE IF EXISTS `Mandato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Mandato` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `dataFim` date NOT NULL,
   `dataInicio` date NOT NULL,
   `cargo_id` bigint(20) NOT NULL,
   `pessoa_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_ccnl6pb4d7emq6dkh5vv6v6ps` (`cargo_id`),
-  KEY `FK_sy86500enb1r8jgvx6eem0de0` (`pessoa_id`),
-  CONSTRAINT `FK_ccnl6pb4d7emq6dkh5vv6v6ps` FOREIGN KEY (`cargo_id`) REFERENCES `Cargo` (`id`),
-  CONSTRAINT `FK_sy86500enb1r8jgvx6eem0de0` FOREIGN KEY (`pessoa_id`) REFERENCES `Pessoa` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `FKew29bj70ojsv0u3kitjdta48y` (`cargo_id`),
+  KEY `FK9lrae840cs9kyxxa87omv4pwb` (`pessoa_id`),
+  CONSTRAINT `FK9lrae840cs9kyxxa87omv4pwb` FOREIGN KEY (`pessoa_id`) REFERENCES `Pessoa` (`id`),
+  CONSTRAINT `FKew29bj70ojsv0u3kitjdta48y` FOREIGN KEY (`cargo_id`) REFERENCES `Cargo` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Mandato`
---
-
-LOCK TABLES `Mandato` WRITE;
-/*!40000 ALTER TABLE `Mandato` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Mandato` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `Pessoa`
@@ -81,21 +63,12 @@ DROP TABLE IF EXISTS `Pessoa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Pessoa` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `cpf` varchar(255) NOT NULL,
   `nome` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Pessoa`
---
-
-LOCK TABLES `Pessoa` WRITE;
-/*!40000 ALTER TABLE `Pessoa` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Pessoa` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `TipoCargo`
@@ -105,31 +78,28 @@ DROP TABLE IF EXISTS `TipoCargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `TipoCargo` (
-  `id` int(11) NOT NULL,
-  `duracao` int(11) DEFAULT NULL,
+  `id` bigint(20) NOT NULL,
+  `duracao` int(11) NOT NULL,
   `nomeCargo` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_ku4s8oaqtwxxecug9dd652j1d` (`nomeCargo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TipoCargo`
+-- Table structure for table `hibernate_sequence`
 --
 
-LOCK TABLES `TipoCargo` WRITE;
-/*!40000 ALTER TABLE `TipoCargo` DISABLE KEYS */;
-INSERT INTO `TipoCargo` VALUES (1,48,'VEREADOR'),(2,48,'DEPUTADO ESTADUAL'),(3,48,'DEPUTADO FEDERAL'),(4,96,'SENADOR');
-/*!40000 ALTER TABLE `TipoCargo` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `hibernate_sequence`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hibernate_sequence` (
+  `sequence_name` varchar(255) NOT NULL,
+  `sequence_next_hi_value` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`sequence_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping events for database 'meuvoto_parlamento'
---
-
---
--- Dumping routines for database 'meuvoto_parlamento'
---
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -140,4 +110,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-04 12:21:48
+-- Dump completed on 2018-10-04 12:52:01

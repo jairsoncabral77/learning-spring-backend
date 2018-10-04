@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,55 +13,85 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 
 import br.org.meuvoto.commons.Periodico;
 import br.org.meuvoto.commons.validator.Periodo;
 
-@NamedQueries({
-	@NamedQuery(name="busca_mandato_com_intersecao_periodo", 
-		query="SELECT m FROM Mandato m, Pessoa p WHERE "
-				+ "(p = ?1) AND ("
-				+ "(?2 BETWEEN m.dataInicio AND m.dataFim) OR "
-				+ "(?3 BETWEEN m.dataInicio AND m.dataFim))"
-	)	
-})
+@NamedQueries({ @NamedQuery(name = "busca_mandato_com_intersecao_periodo", query = "SELECT m FROM Mandato m WHERE "
+		+ "(m.pessoa = ?1) AND (" + "(?2 BETWEEN m.dataInicio AND m.dataFim) OR "
+		+ "(?3 BETWEEN m.dataInicio AND m.dataFim))") })
 
 @Entity
-@Periodo(tamanhoMinimo=1, timeUnit=TimeUnit.DAYS, 
-	message="A data final do Mandato precisa no mínimo um dia após a data inicial")
+@Periodo(tamanhoMinimo = 1, timeUnit = TimeUnit.DAYS, message = "A data final do Mandato precisa no mínimo um dia após a data inicial")
+@TableGenerator(table="hibernate_sequence",name="mandato",valueColumnName="sequence_next_hi_value", allocationSize=5)
 public class Mandato implements Periodico {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.TABLE, generator="mandato")
 	private Long id;
-	
-	@ManyToOne(optional=false,fetch=FetchType.EAGER)
-	@JoinColumn(nullable=false)
-	@NotNull(message="mandato precisa estar associado a um pessoa")
+
+	@ManyToOne(optional = false)
+	@JoinColumn(nullable = false)
+	@NotNull(message = "mandato precisa estar associado a um pessoa")
 	private Pessoa pessoa;
-	
+
 	@Temporal(TemporalType.DATE)
-	@Basic(optional=false)
-	@Column(nullable=false)
-	@NotNull(message="data de início do mandato não pode ser nula")
+	@Basic(optional = false)
+	@Column(nullable = false)
+	@NotNull(message = "data de início do mandato não pode ser nula")
 	private Date dataInicio;
-	
+
 	@Temporal(TemporalType.DATE)
-	@Basic(optional=false)
-	@Column(nullable=false)
-	@NotNull(message="data fim do mandato não pode ser nula")
+	@Basic(optional = true)
+	@Column(nullable = true)
 	private Date dataFim;
-	
-	@ManyToOne(optional=false,fetch=FetchType.EAGER)
-	@JoinColumn(nullable=false)
-	@NotNull(message="mandato precisa estar associado a um cargo")
+
+	@ManyToOne(optional = false)
+	@JoinColumn(nullable = false)
+	@NotNull(message = "mandato precisa estar associado a um cargo")
 	private Cargo cargo;
-	
+
+	@PrePersist
+	@PreUpdate
+	@PostLoad
+	public void validate() {
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		validator.validate(this);
+	}
+
 	public Long getId() {
 		return id;
+	}
+
+	public Mandato paraCargo(Cargo cargo) {
+		this.setCargo(cargo);
+		return this;
+	}
+
+	public Mandato aPartirDe(Date dataInicio) {
+		this.setDataInicio(dataInicio);
+		return this;
+	}
+
+	public Mandato ate(Date dataFim) {
+		this.setDataFim(dataFim);
+		return this;
+	}
+
+	public Mandato ocupadoPor(Pessoa pessoa) {
+		this.setPessoa(pessoa);
+		return this;
 	}
 
 	public void setId(Long id) {
