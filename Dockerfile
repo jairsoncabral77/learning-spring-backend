@@ -1,10 +1,10 @@
 FROM maven:3.5.0-jdk-8-alpine
 
-COPY src test resource test_resource pom.xml maven-settings.xml /opt/parlamento/
+COPY src test resource test_resource pom.xml /opt/parlamento/
 
 WORKDIR /opt/parlamento
 
-RUN mvn -s ./maven-settings.xml install
+RUN mvn install
 
 EXPOSE 8080
 	
