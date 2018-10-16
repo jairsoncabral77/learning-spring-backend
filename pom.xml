@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.org.meuvoto</groupId>
 	<artifactId>parlamento-microservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<name>Parlamento Microservice</name>
 
 	<parent>
@@ -199,11 +199,13 @@
 						<goals>
 							<goal>build</goal>
 						</goals>
-					</execution>
+					</execution>		
 				</executions>
 				<configuration>
-					<repository>registry-scm.prevnet:443/jairson.cabral/cgtd-agil-devops</repository>
-					<tag>${project.version}</tag>
+					<!-- requires username and encripted password at ~/.m2/settings.xml -->
+					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+					<repository>jairsoncabral/estudo</repository>
+					<tag>${project.artifactId}_${project.version}</tag>
 				</configuration>
 			</plugin>
 		</plugins>
