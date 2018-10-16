@@ -36,13 +36,19 @@ public class MandatoService {
 	@Autowired
 	private CargoRepository cargoRepository;
 	
-	/* TESTABILITY; 1; 2; "criar teste automatizado para pesquisaMandatosComPeriodoConflitante" */
-	public List<Mandato> pesquisaMandatosComPeriodoConflitante(Mandato mandato) {
+	public boolean pessoaJaOcupaCargoNoPeriodo(Mandato mandato) {
 		List<Mandato> conflitantes = mandatoRepository.pesquisaMandatosDoPeriodo(
 				mandato.getPessoa(), mandato.getDataInicio(), mandato.getDataFim());
-		return conflitantes; 
+		return ! conflitantes.isEmpty(); 
 	}
 
+	public boolean cargoJaOcupadoNoPeriodo(Mandato mandato) {
+		List<Mandato> conflitantes = mandatoRepository.pesquisaMandatosDoPeriodo(
+				mandato.getCargo(), mandato.getDataInicio(), mandato.getDataFim());
+		return ! conflitantes.isEmpty(); 
+	}
+
+	
 	public Mandato create(Long idCargo, Long idPessoa, Date dataInicio) throws Exception {
 		Logger.getLogger(this.getClass()).debug(String.format("Criando mandato para cargo=%1$d, pessoa=%2%d, dataInicio=%3$tF",idCargo,idPessoa,dataInicio));
 		Mandato mandato =  new Mandato();
@@ -65,13 +71,21 @@ public class MandatoService {
 		dataFim.setTime(dataInicio);
 		dataFim.add(Calendar.MONTH,  cargo.getTipo().getDuracao());
 		mandato.setDataFim(dataFim.getTime());
-		if ( pesquisaMandatosComPeriodoConflitante(mandato).size() > 0 ) {
+		if ( pessoaJaOcupaCargoNoPeriodo(mandato) ) {
 			String message = String.format("%s [id:%d] já exerce um mandato no período de %s a %s", 
 					pessoa.getNome(), pessoa.getId(), SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT).format(dataInicio), 
 					SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT).format(dataFim.getTime()));
 			Logger.getLogger(this.getClass()).error(message);
 			throw new ConflitoPeriodoMandatoException(message);
 		}
+		if ( cargoJaOcupadoNoPeriodo(mandato) ) {
+			String message = String.format("Cargo [id:%d] já é ocupado por mandato no período de %s a %s", 
+					cargo.getId(), SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT).format(dataInicio), 
+					SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT).format(dataFim.getTime()));
+			Logger.getLogger(this.getClass()).error(message);
+			throw new ConflitoPeriodoMandatoException(message);
+		}
+
 		mandato = mandatoRepository.save(mandato);
 		Logger.getLogger(this.getClass()).debug(String.format("Mandato criado para cargo=%d, pessoa=%d, dataInicio=%tF",idCargo,idPessoa,dataInicio));
 		return mandato;

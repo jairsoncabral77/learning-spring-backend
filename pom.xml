@@ -14,10 +14,8 @@
 
 	<profiles>
 		<profile>
-			<id>dev</id>
+			<id>default</id>
 			<properties>
-				<!--jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver -->
-				<!--jdbcURL>jdbc:mysql://localhost:3306/meuvoto_parlamento</jdbcURL -->
 				<jdbcDriver>net.sf.log4jdbc.DriverSpy</jdbcDriver>
 				<jdbcURL>jdbc:log4jdbc:mysql://localhost:3306/parlamento</jdbcURL>
 				<dbusername>parlamento</dbusername>
@@ -38,9 +36,9 @@
 			<id>prod</id>
 			<properties>
 				<jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
-				<jdbcURL>${env.JDBC_URL}</jdbcURL>
-				<dbusername>${env.DB_USERNAME}</dbusername>
-				<dbpassword>${env.DB_PASSWORD}</dbpassword>
+				<jdbcURL>${JDBC_URL}</jdbcURL>
+				<dbusername>${DB_USERNAME}</dbusername>
+				<dbpassword>${DB_PASSWORD}</dbpassword>
 			</properties>
 			<activation>
 				<activeByDefault>false</activeByDefault>
@@ -190,6 +188,23 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.3</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<repository>registry-scm.prevnet:443/jairson.cabral/cgtd-agil-devops</repository>
+					<tag>${project.version}</tag>
+				</configuration>
 			</plugin>
 		</plugins>
 		<testResources>

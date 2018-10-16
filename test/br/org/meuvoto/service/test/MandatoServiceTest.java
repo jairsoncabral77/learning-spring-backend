@@ -35,21 +35,30 @@ public class MandatoServiceTest {
 
 	@Test(expected = ConflitoPeriodoMandatoException.class)
 	@DatabaseSetup("/testData.xml")
-	public void createMandatoConflitante() throws Exception {
-		mandatoService.create(2000L, 3000L, new Date());
+	public void createMandatoPessoaConflitante() throws Exception {
+		mandatoService.create(2000L, 3001L, new GregorianCalendar(2018,02,01).getTime());
+	}
+	
+	@Test(expected = ConflitoPeriodoMandatoException.class)
+	@DatabaseSetup("/testData.xml")
+	public void createMandatoCargoConflitante() throws Exception {
+		mandatoService.create(2001L, 3000L, new GregorianCalendar(2018,02,01).getTime());
 	}
 
 	@Test
 	@DatabaseSetup("/testData.xml")
-	public void createMandato() throws Exception {
-		Mandato mandato = mandatoService.create(2000L, 3001L, new Date());
-		Assert.assertNotNull(mandato);
-		Assert.assertNotNull(mandato.getId());
-		Calendar date = new GregorianCalendar(2022, 01, 01);
-		mandato = mandatoService.create(2000L, 3000L, date.getTime());
-		Assert.assertNotNull(mandato);
-		Assert.assertNotNull(mandato.getId());
+	public void obterMandatosPorCPF() throws Exception {
 		Assert.assertFalse(mandatoService.obterMandatosPorPessoa("11111111111").isEmpty());
+	}
+
+	
+	@Test
+	@DatabaseSetup("/testData.xml")
+	public void createMandato() throws Exception {
+		Calendar dataInicio = new GregorianCalendar(2022, 01, 01);
+		Mandato mandato = mandatoService.create(2001L, 3001L, dataInicio.getTime());
+		Assert.assertNotNull(mandato);
+		Assert.assertNotNull(mandato.getId());
 	}
 	
 	@Test(expected = DependenciaNaoEncontradaException.class)

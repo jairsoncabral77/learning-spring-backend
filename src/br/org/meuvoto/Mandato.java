@@ -27,10 +27,13 @@ import javax.validation.constraints.NotNull;
 import br.org.meuvoto.commons.Periodico;
 import br.org.meuvoto.commons.validator.Periodo;
 
-@NamedQueries({ @NamedQuery(name = "busca_mandato_com_intersecao_periodo", query = "SELECT m FROM Mandato m WHERE "
+@NamedQueries({ 
+	@NamedQuery(name = "busca_mandato_com_intersecao_periodo", query = "SELECT m FROM Mandato m WHERE "
 		+ "(m.pessoa = ?1) AND (" + "(?2 BETWEEN m.dataInicio AND m.dataFim) OR "
+		+ "(?3 BETWEEN m.dataInicio AND m.dataFim))"),
+	@NamedQuery(name = "busca_cargo_ocupado_no_periodo", query = "SELECT m FROM Mandato m WHERE "
+		+ "(m.cargo = ?1) AND (" + "(?2 BETWEEN m.dataInicio AND m.dataFim) OR "
 		+ "(?3 BETWEEN m.dataInicio AND m.dataFim))") })
-
 @Entity
 @Periodo(tamanhoMinimo = 1, timeUnit = TimeUnit.DAYS, message = "A data final do Mandato precisa no mínimo um dia após a data inicial")
 @TableGenerator(table="hibernate_sequence",name="mandato",valueColumnName="sequence_next_hi_value", allocationSize=5)
