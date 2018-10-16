@@ -14,7 +14,7 @@
 
 	<profiles>
 		<profile>
-			<id>default</id>
+			<id>dev</id>
 			<properties>
 				<jdbcDriver>net.sf.log4jdbc.DriverSpy</jdbcDriver>
 				<jdbcURL>jdbc:log4jdbc:mysql://localhost:3306/parlamento</jdbcURL>
