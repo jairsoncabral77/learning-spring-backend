@@ -12,42 +12,6 @@
 		<version>1.5.1.RELEASE</version>
 	</parent>
 
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<properties>
-				<jdbcDriver>net.sf.log4jdbc.DriverSpy</jdbcDriver>
-				<jdbcURL>jdbc:log4jdbc:mysql://localhost:3306/parlamento</jdbcURL>
-				<dbusername>parlamento</dbusername>
-				<dbpassword>parlamento123</dbpassword>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.lazyluke</groupId>
-					<artifactId>log4jdbc-remix</artifactId>
-					<version>0.2.7</version>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
-				<jdbcURL>${JDBC_URL}</jdbcURL>
-				<dbusername>${DB_USERNAME}</dbusername>
-				<dbpassword>${DB_PASSWORD}</dbpassword>
-			</properties>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<dependencies>
-			</dependencies>
-		</profile>
-	</profiles>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -157,6 +121,10 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<jdbcDriver>com.mysql.jdbc.Driver</jdbcDriver>
+		<jdbcURL>${JDBC_URL}</jdbcURL>
+		<dbusername>${DB_USERNAME}</dbusername>
+		<dbpassword>${DB_PASSWORD}</dbpassword>
 	</properties>
 
 	<build>
@@ -193,14 +161,14 @@
 				<groupId>com.spotify</groupId>
 				<artifactId>dockerfile-maven-plugin</artifactId>
 				<version>1.4.3</version>
-				<executions>
-					<execution>
-						<id>default</id>
-						<goals>
-							<goal>build</goal>
-						</goals>
-					</execution>		
-				</executions>
+				<!-- <executions> -->
+				<!-- <execution> -->
+				<!-- <id>default</id> -->
+				<!-- <goals> -->
+				<!-- <goal>build</goal> -->
+				<!-- </goals> -->
+				<!-- </execution> -->
+				<!-- </executions> -->
 				<configuration>
 					<!-- requires username and encripted password at ~/.m2/settings.xml -->
 					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>

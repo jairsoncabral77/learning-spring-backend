@@ -1,10 +1,21 @@
-FROM java:8u111-jdk
+FROM maven:3-jdk-8-alpine as builder
 
-ENV RUNNABLE_JAR=/opt/parlamento/parlamento-microservice.jar
+ARG MAVEN_OPTS
+
+ENV MAVEN_OPTS=${MAVEN_OPTS}
+
+RUN mkdir build
+
+COPY ./ build/
+
+RUN cd build \
+	&& mvn install
+
+FROM  openjdk:8-jre-alpine
 
 WORKDIR /opt/parlamento
 
-ADD ./target/parlamento-microservice-*.jar /opt/parlamento/parlamento-microservice.jar
+COPY --from=builder ./build/target/parlamento-microservice-*.jar /opt/parlamento/parlamento-microservice.jar
 
 EXPOSE 8080
 
