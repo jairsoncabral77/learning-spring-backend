@@ -19,6 +19,8 @@ COPY --from=builder ./build/target/parlamento-microservice-*.jar /opt/parlamento
 
 EXPOSE 8080
 
+VOLUME /var/log/
+
 # RUN COMMAND: "docker run --env JDBC_URL=<url> --env DB_USERNAME=<user> --env DB_PASSWORD=<password> -p 8080:8080 <tag>
 
 # é preciso fornecer as variáveis de ambiente: 	DB_URL, DB_USERNAME e DB_PASSWORD
